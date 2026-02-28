@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- =========================================================
+         Action aliases: keep menus.xml stable even if earlier files
+         used slightly different XML IDs (singular vs plural).
+         ========================================================= -->
+
+    <!-- Main equipment action (safe alias) -->
+    <record id="action_client_equipment" model="ir.actions.act_window">
+        <field name="name">Client Equipment</field>
+        <field name="res_model">client.equipment</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Categories (plural alias) -->
+    <record id="action_client_equipment_categories" model="ir.actions.act_window">
+        <field name="name">Categories</field>
+        <field name="res_model">client.equipment.category</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Manufacturers (plural alias) -->
+    <record id="action_client_equipment_manufacturers" model="ir.actions.act_window">
+        <field name="name">Manufacturers</field>
+        <field name="res_model">client.equipment.manufacturer</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Technician list (if menus.xml expects it) -->
+    <record id="action_client_equipment_technicians" model="ir.actions.act_window">
+        <field name="name">Technicians</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('share','=',False)]</field>
+        <field name="context">{}</field>
+    </record>
+</odoo>

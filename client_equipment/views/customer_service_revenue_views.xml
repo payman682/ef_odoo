@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Customer Service Summary (Revenue): based on posted customer invoice lines (no refunds) -->
+
+    <record id="view_customer_service_revenue_search" model="ir.ui.view">
+        <field name="name">account.move.line.customer.service.revenue.search</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <search string="Customer Service Summary (Revenue)">
+                <field name="partner_id"/>
+                <field name="client_equipment_id"/>
+                <field name="product_id"/>
+                <field name="ce_cost_bucket"/>
+
+                <filter string="Customer" name="grp_partner" context="{'group_by': 'partner_id'}"/>
+                <filter string="Equipment" name="grp_equipment" context="{'group_by': 'client_equipment_id'}"/>
+                <filter string="Bucket" name="grp_bucket" context="{'group_by': 'ce_cost_bucket'}"/>
+                <filter string="Month" name="grp_month" context="{'group_by': 'date:month'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_customer_service_revenue_list" model="ir.ui.view">
+        <field name="name">account.move.line.customer.service.revenue.list</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <list string="Customer Service Summary (Revenue)" create="false" edit="false" delete="false">
+                <field name="move_id"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="client_equipment_id"/>
+                <field name="product_id"/>
+                <field name="quantity"/>
+                <field name="price_subtotal"/>
+                <field name="price_total"/>
+                <field name="ce_cost_bucket"/>
+                <field name="ce_labor_amount"/>
+                <field name="ce_parts_amount"/>
+                <field name="ce_labor_total"/>
+                <field name="ce_parts_total"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_customer_service_revenue_pivot" model="ir.ui.view">
+        <field name="name">account.move.line.customer.service.revenue.pivot</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Customer Service Summary (Revenue)">
+                <field name="partner_id" type="row"/>
+                <field name="client_equipment_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="ce_cost_bucket" type="col"/>
+
+                <field name="price_subtotal" type="measure"/>
+                <field name="price_total" type="measure"/>
+                <field name="ce_labor_amount" type="measure"/>
+                <field name="ce_parts_amount" type="measure"/>
+                <field name="ce_labor_total" type="measure"/>
+                <field name="ce_parts_total" type="measure"/>
+                <field name="quantity" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_customer_service_revenue" model="ir.actions.act_window">
+        <field name="name">Customer Service Summary (Revenue)</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">list,pivot,form</field>
+        <field name="search_view_id" ref="view_customer_service_revenue_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_customer_service_revenue_list')}),
+            (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_customer_service_revenue_pivot')})
+        ]"/>
+        <field name="domain">[
+            ('client_equipment_id','!=',False),
+            ('display_type','=',False),
+            ('exclude_from_invoice_tab','=',False),
+            ('move_id.state','=','posted'),
+            ('move_id.move_type','in',('out_invoice','out_refund'))
+        ]</field>
+        <field name="context">{'search_default_grp_partner': 1}</field>
+    </record>
+</odoo>

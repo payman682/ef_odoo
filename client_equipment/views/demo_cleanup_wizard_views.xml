@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_demo_cleanup_wizard_form" model="ir.ui.view">
+        <field name="name">client.equipment.demo.cleanup.wizard.form</field>
+        <field name="model">client.equipment.demo.cleanup.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cleanup Demo Data">
+                <sheet>
+                    <group>
+                        <div class="o_form_label">
+                            This will remove demo PM checklist data shipped with the module (e.g., Forklift category/template).
+                            It will delete demo templates/lines and then delete the demo category if possible; otherwise it will archive it.
+                        </div>
+                        <field name="confirm"/>
+                    </group>
+                    <footer>
+                        <button name="action_cleanup_strict" type="object" string="Run Cleanup" class="btn-primary"/>
+                        <button special="cancel" string="Cancel" class="btn-secondary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_demo_cleanup_wizard" model="ir.actions.act_window">
+        <field name="name">Cleanup Demo Data</field>
+        <field name="res_model">client.equipment.demo.cleanup.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_client_equipment_demo_cleanup"
+              name="Cleanup Demo Data"
+              parent="client_equipment.menu_client_equipment_root"
+              action="action_demo_cleanup_wizard"
+              sequence="99"
+              groups="client_equipment.group_client_equipment_manager"/>
+</odoo>

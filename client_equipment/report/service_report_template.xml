@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- Main template for ONE task -->
+  <template id="service_report_task">
+    <t t-call="web.external_layout">
+      <t t-set="o" t-value="doc"/>
+      <div class="page">
+        <h2>Service Report</h2>
+
+        <table class="table table-sm" style="width:100%;">
+          <tr>
+            <td><strong>Task</strong></td>
+            <td><span t-esc="o.name"/></td>
+            <td><strong>Status</strong></td>
+            <td><span t-esc="o.stage_id.name if o.stage_id else ''"/></td>
+          </tr>
+          <tr>
+            <td><strong>Deadline</strong></td>
+            <td><span t-esc="o.date_deadline or ''"/></td>
+            <td><strong>Technician(s)</strong></td>
+            <td>
+             <t t-set="tech_names" t-value="', '.join(o.user_ids.mapped('name')) if o.user_ids else ''"/>
+             <span t-esc="tech_names"/>
+            </td>
+
+          </tr>
+        </table>
+
+        <t t-if="o.client_equipment_id">
+          <h3>Equipment</h3>
+          <table class="table table-sm" style="width:100%;">
+            <tr>
+              <td><strong>Customer</strong></td>
+              <td><span t-esc="o.client_equipment_id.partner_id.name"/></td>
+              <td><strong>Equipment</strong></td>
+              <td><span t-esc="o.client_equipment_id.name"/></td>
+            </tr>
+            <tr>
+              <td><strong>Manufacturer</strong></td>
+              <td><span t-esc="o.client_equipment_id.manufacturer_id.name if o.client_equipment_id.manufacturer_id else ''"/></td>
+              <td><strong>Model</strong></td>
+              <td><span t-esc="o.client_equipment_id.model or ''"/></td>
+            </tr>
+            <tr>
+              <td><strong>Category</strong></td>
+              <td><span t-esc="o.client_equipment_id.category_id.name if o.client_equipment_id.category_id else ''"/></td>
+              <td><strong>Barcode</strong></td>
+              <td><span t-esc="o.client_equipment_id.barcode or ''"/></td>
+            </tr>
+            <tr>
+              <td><strong>Serial</strong></td>
+              <td><span t-esc="o.client_equipment_id.serial_number or ''"/></td>
+              <td><strong>Asset Tag</strong></td>
+              <td><span t-esc="o.client_equipment_id.asset_tag or ''"/></td>
+            </tr>
+            <tr>
+              <td><strong>Hour Meter</strong></td>
+              <td><span t-esc="o.hour_meter_reading if o.hour_meter_reading is not None else ''"/></td>
+              <td><strong>Prev Hours</strong></td>
+              <td><span t-esc="o.hour_meter_previous if o.hour_meter_previous is not None else ''"/></td>
+            </tr>
+          </table>
+
+          <h3>Service Location</h3>
+          <table class="table table-sm" style="width:100%;">
+            <tr>
+              <td><strong>Site</strong></td>
+              <td><span t-esc="o.client_equipment_id.site_name or ''"/></td>
+              <td><strong>City</strong></td>
+              <td><span t-esc="o.client_equipment_id.site_city or ''"/></td>
+            </tr>
+            <tr>
+              <td><strong>Address</strong></td>
+              <td colspan="3">
+                <span t-esc="o.client_equipment_id.site_street or ''"/>
+                <t t-if="o.client_equipment_id.site_state">, <span t-esc="o.client_equipment_id.site_state"/></t>
+                <t t-if="o.client_equipment_id.site_zip">, <span t-esc="o.client_equipment_id.site_zip"/></t>
+              </td>
+            </tr>
+          </table>
+        </t>
+
+        <h3>Description / Work Done</h3>
+        <div t-if="o.description"><t t-raw="o.description"/></div>
+        <div t-if="not o.description"><em>No description provided.</em></div>
+
+        <h3>Parts Used</h3>
+        <table class="table table-sm" style="width:100%;">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th class="text-right">Qty</th>
+              <th>UoM</th>
+              <th>Lot/Serial</th>
+              <th>Consumed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <t t-if="o.part_line_ids">
+              <t t-foreach="o.part_line_ids" t-as="l">
+                <tr>
+                  <td><span t-esc="l.product_id.display_name"/></td>
+                  <td class="text-right"><span t-esc="l.quantity"/></td>
+                  <td><span t-esc="l.product_uom_id.name"/></td>
+                  <td><span t-esc="l.lot_id.name if l.lot_id else ''"/></td>
+                  <td><span t-esc="'Yes' if l.consumed else 'No'"/></td>
+                </tr>
+              </t>
+            </t>
+            <t t-if="not o.part_line_ids">
+              <tr><td colspan="5"><em>No parts recorded.</em></td></tr>
+            </t>
+          </tbody>
+        </table>
+
+        
+        <t t-if="o.pm_checklist_line_ids">
+          <h3>PM Checklist</h3>          <t t-set="status_labels" t-value="dict(o.env['project.task.pm.checklist.line']._fields['status'].selection)"/>
+          <table class="table table-sm" style="width:100%;">
+            <thead>
+              <tr>
+                <th>Section</th>
+                <th>Item</th>
+                <th>Status</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <t t-foreach="o.pm_checklist_line_ids.sorted(lambda x: (x.sequence, x.id))" t-as="cl">
+                <tr>
+                  <td><span t-esc="cl.section_id.name"/></td>
+                  <td><span t-esc="cl.name"/></td>
+                  <td><span t-esc="status_labels.get(cl.status, cl.status)"/></td>
+                  <td><span t-esc="cl.remarks or ''"/></td>
+                </tr>
+              </t>
+            </tbody>
+          </table>
+        </t>
+
+        <h3>Signatures</h3>
+        <table class="table table-sm" style="width:100%;">
+          <tr>
+            <td style="width:50%; vertical-align:top;">
+              <strong>Technician</strong><br/>
+              <span t-esc="o.tech_signed_name or ''"/><br/>
+              <span t-esc="o.tech_signed_on or ''"/><br/>
+              <t t-if="o.tech_signature">
+                <img t-att-src="image_data_uri(o.tech_signature)" style="max-height:120px; max-width:100%; border:1px solid #ddd;"/>
+              </t>
+              <t t-else="">
+                <p>_______________________________</p>
+              </t>
+            </td>
+            <td style="width:50%; vertical-align:top;">
+              <strong>Customer</strong><br/>
+              <span t-esc="o.customer_signed_name or ''"/><br/>
+              <span t-esc="o.customer_signed_on or ''"/><br/>
+              <t t-if="o.customer_signature">
+                <img t-att-src="image_data_uri(o.customer_signature)" style="max-height:120px; max-width:100%; border:1px solid #ddd;"/>
+              </t>
+              <t t-else="">
+                <p>_______________________________</p>
+              </t>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+    </t>
+  </template>
+
+  <!-- Wrapper: prints multiple tasks -->
+  <template id="service_report_task_wrapper">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="doc">
+        <t t-call="client_equipment.service_report_task"/>
+      </t>
+    </t>
+  </template>
+</odoo>

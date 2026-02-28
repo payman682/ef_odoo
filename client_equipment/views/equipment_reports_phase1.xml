@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- =============== Technician Performance (project.task) =============== -->
+        <record id="view_equipment_tech_performance_list" model="ir.ui.view">
+            <field name="name">project.task.equipment.tech.performance.list</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <list string="Technician Performance" create="false">
+                    <field name="name"/>
+                    <field name="technician_id"/>
+                    <field name="service_kind"/>
+                    <field name="partner_id"/>
+                    <field name="equipment_site"/>
+                    <field name="client_equipment_id" string="Equipment"/>
+                    <field name="equipment_serial"/>
+                    <field name="stage_id"/>
+                    <field name="date_deadline"/>
+                    <field name="is_overdue"/>
+                    <field name="effective_hours" optional="show"/>
+                    <field name="service_duration_hours" optional="show"/>
+                    <field name="delay_days" optional="show"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_equipment_tech_performance_pivot" model="ir.ui.view">
+            <field name="name">project.task.equipment.tech.performance.pivot</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <pivot string="Technician Performance">
+                    <field name="technician_id" type="row"/>
+                    <field name="service_kind" type="col"/>
+                    <field name="partner_id" type="row"/>
+                    <field name="service_history_count" type="measure"/>
+                    <field name="effective_hours" type="measure"/>
+                    <field name="service_duration_hours" type="measure"/>
+                    <field name="delay_days" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_equipment_tech_performance_graph" model="ir.ui.view">
+            <field name="name">project.task.equipment.tech.performance.graph</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <graph string="Technician Performance" type="bar">
+                    <field name="technician_id" type="row"/>
+                    <field name="service_kind" type="col"/>
+                    <field name="service_history_count" type="measure"/>
+                    <field name="effective_hours" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_equipment_tech_performance" model="ir.actions.act_window">
+            <field name="name">Technician Performance</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">pivot,graph,list,form</field>
+            <field name="domain">[("client_equipment_id","!=",False)]</field>
+            <field name="context">{'group_by': ['technician_id']}</field>
+        </record>
+
+        <record id="action_equipment_tech_performance_pivot_view" model="ir.actions.act_window.view">
+            <field name="sequence">1</field>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="view_equipment_tech_performance_pivot"/>
+            <field name="act_window_id" ref="action_equipment_tech_performance"/>
+        </record>
+
+        <record id="action_equipment_tech_performance_graph_view" model="ir.actions.act_window.view">
+            <field name="sequence">2</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_equipment_tech_performance_graph"/>
+            <field name="act_window_id" ref="action_equipment_tech_performance"/>
+        </record>
+
+        <record id="action_equipment_tech_performance_list_view" model="ir.actions.act_window.view">
+            <field name="sequence">3</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="view_equipment_tech_performance_list"/>
+            <field name="act_window_id" ref="action_equipment_tech_performance"/>
+        </record>
+
+        <!-- =============== Equipment Service History Analytics (project.task) =============== -->
+        <record id="view_equipment_history_analytics_pivot" model="ir.ui.view">
+            <field name="name">project.task.equipment.history.analytics.pivot</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <pivot string="Equipment Service History Analytics">
+                    <field name="client_equipment_id" type="row"/>
+                    <field name="equipment_model" type="row"/>
+                    <field name="equipment_serial" type="row"/>
+                    <field name="partner_id" type="row"/>
+                    <field name="service_kind" type="col"/>
+                    <field name="create_date" interval="month" type="col"/>
+                    <field name="service_history_count" type="measure"/>
+                    <field name="effective_hours" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_equipment_history_analytics_graph" model="ir.ui.view">
+            <field name="name">project.task.equipment.history.analytics.graph</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <graph string="Equipment Service History Analytics" type="line">
+                    <field name="create_date" interval="month" type="row"/>
+                    <field name="service_kind" type="col"/>
+                    <field name="service_history_count" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_equipment_history_analytics" model="ir.actions.act_window">
+            <field name="name">Equipment Service History Analytics</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">pivot,graph,list,form</field>
+            <field name="domain">[("client_equipment_id","!=",False)]</field>
+            <field name="context">{'group_by': ['client_equipment_id']}</field>
+        </record>
+
+        <record id="action_equipment_history_analytics_pivot_view" model="ir.actions.act_window.view">
+            <field name="sequence">1</field>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="view_equipment_history_analytics_pivot"/>
+            <field name="act_window_id" ref="action_equipment_history_analytics"/>
+        </record>
+
+        <record id="action_equipment_history_analytics_graph_view" model="ir.actions.act_window.view">
+            <field name="sequence">2</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_equipment_history_analytics_graph"/>
+            <field name="act_window_id" ref="action_equipment_history_analytics"/>
+        </record>
+
+        <!-- =============== PM Compliance Dashboard (client.equipment.maintenance) =============== -->
+        <record id="view_equipment_pm_compliance_list" model="ir.ui.view">
+            <field name="name">client.equipment.maintenance.pm.compliance.list</field>
+            <field name="model">client.equipment.maintenance</field>
+            <field name="arch" type="xml">
+                <list string="PM Compliance" create="false">
+                    <field name="name"/>
+                    <field name="commercial_partner_id"/>
+                    <field name="equipment_site"/>
+                    <field name="equipment_id" string="Equipment"/>
+                    <field name="equipment_model"/>
+                    <field name="equipment_serial"/>
+                    <field name="last_service_date"/>
+                    <field name="next_service_date"/>
+                    <field name="is_overdue"/>
+                    <field name="interval_number"/>
+                    <field name="interval_type"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_equipment_pm_compliance_pivot" model="ir.ui.view">
+            <field name="name">client.equipment.maintenance.pm.compliance.pivot</field>
+            <field name="model">client.equipment.maintenance</field>
+            <field name="arch" type="xml">
+                <pivot string="PM Compliance">
+                    <field name="commercial_partner_id" type="row"/>
+                    <field name="equipment_site" type="row"/>
+                    <field name="equipment_id" type="row"/>
+                    <field name="next_service_date" interval="month" type="col"/>
+                    <field name="pm_count" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_equipment_pm_compliance_graph" model="ir.ui.view">
+            <field name="name">client.equipment.maintenance.pm.compliance.graph</field>
+            <field name="model">client.equipment.maintenance</field>
+            <field name="arch" type="xml">
+                <graph string="PM Compliance" type="bar">
+                    <field name="next_service_date" interval="month" type="row"/>
+                    <field name="is_overdue" type="col"/>
+                    <field name="pm_count" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_equipment_pm_compliance" model="ir.actions.act_window">
+            <field name="name">PM Compliance Dashboard</field>
+            <field name="res_model">client.equipment.maintenance</field>
+            <field name="view_mode">pivot,graph,list,form</field>
+        </record>
+
+        <record id="action_equipment_pm_compliance_pivot_view" model="ir.actions.act_window.view">
+            <field name="sequence">1</field>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="view_equipment_pm_compliance_pivot"/>
+            <field name="act_window_id" ref="action_equipment_pm_compliance"/>
+        </record>
+
+        <record id="action_equipment_pm_compliance_graph_view" model="ir.actions.act_window.view">
+            <field name="sequence">2</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_equipment_pm_compliance_graph"/>
+            <field name="act_window_id" ref="action_equipment_pm_compliance"/>
+        </record>
+
+        <record id="action_equipment_pm_compliance_list_view" model="ir.actions.act_window.view">
+            <field name="sequence">3</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="view_equipment_pm_compliance_list"/>
+            <field name="act_window_id" ref="action_equipment_pm_compliance"/>
+        </record>
+
+        <!-- =============== Customer Service Summary (Operational) (project.task) =============== -->
+        <record id="view_customer_service_summary_pivot" model="ir.ui.view">
+            <field name="name">project.task.customer.service.summary.pivot</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <pivot string="Customer Service Summary (Operational)">
+                    <field name="partner_id" type="row"/>
+                    <field name="equipment_site" type="row"/>
+                    <field name="service_kind" type="col"/>
+                    <field name="create_date" interval="month" type="col"/>
+                    <field name="service_history_count" type="measure"/>
+                    <field name="effective_hours" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_customer_service_summary_graph" model="ir.ui.view">
+            <field name="name">project.task.customer.service.summary.graph</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <graph string="Customer Service Summary (Operational)" type="bar">
+                    <field name="partner_id" type="row"/>
+                    <field name="service_kind" type="col"/>
+                    <field name="service_history_count" type="measure"/>
+                    <field name="effective_hours" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_customer_service_summary" model="ir.actions.act_window">
+            <field name="name">Customer Service Summary (Operational)</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">pivot,graph,list,form</field>
+            <field name="domain">[("client_equipment_id","!=",False)]</field>
+            <field name="context">{'group_by': ['partner_id', 'equipment_site']}</field>
+        </record>
+
+        <record id="action_customer_service_summary_pivot_view" model="ir.actions.act_window.view">
+            <field name="sequence">1</field>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="view_customer_service_summary_pivot"/>
+            <field name="act_window_id" ref="action_customer_service_summary"/>
+        </record>
+
+        <record id="action_customer_service_summary_graph_view" model="ir.actions.act_window.view">
+            <field name="sequence">2</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_customer_service_summary_graph"/>
+            <field name="act_window_id" ref="action_customer_service_summary"/>
+        </record>
+
+        <!-- =============== Customer Service Summary (Revenue) (account.move.line) =============== -->
+        <record id="view_equipment_revenue_summary_pivot" model="ir.ui.view">
+            <field name="name">account.move.line.equipment.revenue.summary.pivot</field>
+            <field name="model">account.move.line</field>
+            <field name="arch" type="xml">
+                <pivot string="Customer Service Summary (Revenue)">
+                    <field name="partner_id" type="row"/>
+                    <field name="client_equipment_id" type="row"/>
+                    <field name="date" interval="month" type="col"/>
+                    <field name="price_subtotal" type="measure"/>
+                    <field name="quantity" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_equipment_revenue_summary_graph" model="ir.ui.view">
+            <field name="name">account.move.line.equipment.revenue.summary.graph</field>
+            <field name="model">account.move.line</field>
+            <field name="arch" type="xml">
+                <graph string="Customer Service Summary (Revenue)" type="bar">
+                    <field name="date" interval="month" type="row"/>
+                    <field name="partner_id" type="col"/>
+                    <field name="price_subtotal" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_equipment_revenue_summary" model="ir.actions.act_window">
+            <field name="name">Customer Service Summary (Revenue)</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_mode">pivot,graph,list,form</field>
+            <field name="domain">[('client_equipment_id','!=',False), ('move_id.state','=','posted'), ('move_id.move_type','in',('out_invoice','out_refund'))]</field>
+        </record>
+
+        <record id="action_equipment_revenue_summary_pivot_view" model="ir.actions.act_window.view">
+            <field name="sequence">1</field>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="view_equipment_revenue_summary_pivot"/>
+            <field name="act_window_id" ref="action_equipment_revenue_summary"/>
+        </record>
+
+        <record id="action_equipment_revenue_summary_graph_view" model="ir.actions.act_window.view">
+            <field name="sequence">2</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_equipment_revenue_summary_graph"/>
+            <field name="act_window_id" ref="action_equipment_revenue_summary"/>
+        </record>
+
+        <!-- =============== Menus (Reports) =============== -->
+        <menuitem id="menu_client_equipment_report_tech_performance"
+                  name="Technician Performance"
+                  parent="menu_client_equipment_reports_root"
+                  action="action_equipment_tech_performance"
+                  sequence="10"/>
+
+        <menuitem id="menu_client_equipment_report_equipment_analytics"
+                  name="Equipment Analytics"
+                  parent="menu_client_equipment_reports_root"
+                  action="action_equipment_history_analytics"
+                  sequence="20"/>
+
+        <menuitem id="menu_client_equipment_report_pm_compliance"
+                  name="PM Compliance"
+                  parent="menu_client_equipment_reports_root"
+                  action="action_equipment_pm_compliance"
+                  sequence="30"/>
+
+        <menuitem id="menu_client_equipment_report_customer_service_summary"
+                  name="Customer Service Summary (Operational)"
+                  parent="menu_client_equipment_reports_root"
+                  action="action_customer_service_summary"
+                  sequence="40"/>
+
+        <menuitem id="menu_client_equipment_report_customer_revenue_summary"
+                  name="Customer Service Summary (Revenue)"
+                  parent="menu_client_equipment_reports_root"
+                  action="action_equipment_revenue_summary"
+                  sequence="50"/>
+
+    </data>
+</odoo>

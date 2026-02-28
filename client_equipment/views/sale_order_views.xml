@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_sale_order_form_inherit_client_equipment" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.client_equipment</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Source Task + Equipment near the payment terms group -->
+            <xpath expr="//sheet//group//field[@name='payment_term_id']" position="after">
+                <field name="source_task_id" readonly="1"/>
+                <field name="equipment_id" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,42 @@
+<odoo>
+    <record id="view_serial_uniqueness_wizard_form" model="ir.ui.view">
+        <field name="name">client.equipment.serial.uniqueness.wizard.form</field>
+        <field name="model">client.equipment.serial.uniqueness.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Serial Uniqueness Enforcement">
+                <sheet>
+                    <group>
+                        <div class="o_form_label">
+                            Use this tool to detect duplicate serial numbers and enable database-level uniqueness rules (C2):
+                            if Site is set → unique (Customer, Site, Serial), otherwise → unique (Customer, Serial).
+                        </div>
+                    </group>
+                    <group>
+                        <field name="duplicates_with_site_count" readonly="1"/>
+                        <field name="duplicates_no_site_count" readonly="1"/>
+                    </group>
+                    <footer>
+                        <button name="action_show_duplicates_with_site" type="object" string="Show Duplicates (With Site)" class="btn-secondary"/>
+                        <button name="action_show_duplicates_no_site" type="object" string="Show Duplicates (No Site)" class="btn-secondary"/>
+                        <button name="action_enable_enforcement" type="object" string="Enable Enforcement" class="btn-primary"/>
+                        <button string="Close" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_serial_uniqueness_wizard" model="ir.actions.act_window">
+        <field name="name">Serial Uniqueness</field>
+        <field name="res_model">client.equipment.serial.uniqueness.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_serial_uniqueness_wizard"
+              name="Serial Uniqueness"
+              parent="client_equipment.menu_client_equipment_root"
+              action="action_serial_uniqueness_wizard"
+              sequence="98"
+              groups="client_equipment.group_client_equipment_manager"/>
+</odoo>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Actions must be defined before being referenced by menuitems -->
+        <record id="action_equipment_cost_billed" model="ir.actions.act_window">
+            <field name="name">Equipment Cost (Billed)</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_mode">list,pivot,form</field>
+            <field name="search_view_id" ref="view_equipment_cost_billed_search"/>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('view_equipment_cost_billed_list')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_equipment_cost_billed_pivot')})
+            ]"/>
+            <field name="domain">[
+                ('client_equipment_id','!=',False),
+                ('display_type','=',False),
+                ('exclude_from_invoice_tab','=',False),
+                ('move_id.state','=','posted'),
+                ('move_id.move_type','in',('out_invoice','out_refund'))
+            ]</field>
+            <field name="context">{'search_default_grp_equipment': 1}</field>
+        </record>
+
+        <record id="action_equipment_service_history" model="ir.actions.act_window">
+            <field name="name">Service History</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">kanban,list,form,calendar,pivot</field>
+            <field name="domain">[("client_equipment_id", "!=", False)]</field>
+            <field name="context">{'group_by': ['partner_id', 'equipment_site']}</field>
+        </record>
+        <record id="action_equipment_service_history_view_list" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="client_equipment.view_equipment_service_history_list"/>
+            <field name="act_window_id" ref="client_equipment.action_equipment_service_history"/>
+        </record>
+
+        <record id="action_equipment_service_history_view_pivot" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="client_equipment.view_equipment_service_history_pivot"/>
+            <field name="act_window_id" ref="client_equipment.action_equipment_service_history"/>
+        </record>
+
+
+        <record id="action_equipment_service_history_view_list" model="ir.actions.act_window.view">
+            <field name="sequence" eval="10"/>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="client_equipment.view_equipment_service_history_list"/>
+            <field name="act_window_id" ref="client_equipment.action_equipment_service_history"/>
+        </record>
+
+        <record id="action_equipment_service_history_view_pivot" model="ir.actions.act_window.view">
+            <field name="sequence" eval="40"/>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="client_equipment.view_equipment_service_history_pivot"/>
+            <field name="act_window_id" ref="client_equipment.action_equipment_service_history"/>
+        </record>
+
+
+        <!-- Menus -->
+        <menuitem id="menu_client_equipment_reports_root"
+                  name="Reports"
+                  parent="client_equipment.menu_client_equipment_root"
+                  sequence="90"
+                  groups="client_equipment.group_client_equipment_user"/>
+
+        <menuitem id="menu_client_equipment_report_cost"
+                  name="Equipment Cost (Billed)"
+                  parent="client_equipment.menu_client_equipment_reports_root"
+                  action="client_equipment.action_equipment_cost_billed"
+                  sequence="10"
+                  groups="client_equipment.group_client_equipment_user"/>
+
+        <menuitem id="menu_client_equipment_report_service_history"
+                  name="Service History"
+                  parent="client_equipment.menu_client_equipment_reports_root"
+                  action="client_equipment.action_equipment_service_history"
+                  sequence="20"
+                  groups="client_equipment.group_client_equipment_user"/>
+
+    
+        <menuitem id="menu_client_equipment_report_customer_revenue"
+                  name="Customer Service Summary (Revenue)"
+                  parent="client_equipment.menu_client_equipment_reports_root"
+                  action="client_equipment.action_customer_service_revenue"
+                  sequence="30"
+                  groups="client_equipment.group_client_equipment_user"/>
+</data>
+</odoo>

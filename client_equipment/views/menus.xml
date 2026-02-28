@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main menus under Equipment root -->
+    <menuitem id="menu_client_equipment"
+              name="Client Equipment"
+              parent="menu_client_equipment_root"
+              action="action_client_equipment"
+              sequence="10"
+              groups="client_equipment.group_client_equipment_user"/>
+
+    <menuitem id="menu_client_equipment_maintenance_schedules"
+              name="Maintenance Schedules"
+              parent="menu_client_equipment_root"
+              action="action_client_equipment_maintenance"
+              sequence="20"
+              groups="client_equipment.group_client_equipment_user"/>
+
+    <menuitem id="menu_client_equipment_new_pm"
+              name="New PM"
+              parent="menu_client_equipment_root"
+              action="action_client_equipment_new_pm_wizard"
+              sequence="25"
+              groups="client_equipment.group_client_equipment_user"/>
+
+
+    <menuitem id="menu_pm_checklist_templates"
+              name="PM Checklist Templates"
+              parent="menu_client_equipment_root"
+              action="action_pm_checklist_templates"
+              sequence="30"
+              groups="client_equipment.group_client_equipment_user"/>
+
+    <menuitem id="menu_pm_checklist_sections"
+              name="PM Checklist Sections"
+              parent="menu_client_equipment_root"
+              action="action_pm_checklist_sections"
+              sequence="40"
+              groups="client_equipment.group_client_equipment_user"/>
+
+    <menuitem id="menu_technicians"
+              name="Technician"
+              parent="menu_client_equipment_root"
+              action="action_client_equipment_technicians"
+              sequence="50"
+              groups="client_equipment.group_client_equipment_user"/>
+
+    <menuitem id="menu_equipment_categories"
+              name="Categories"
+              parent="menu_client_equipment_root"
+              action="action_client_equipment_categories"
+              sequence="60"
+              groups="client_equipment.group_client_equipment_user"/>
+
+    <menuitem id="menu_equipment_manufacturers"
+              name="Manufacturers"
+              parent="menu_client_equipment_root"
+              action="action_client_equipment_manufacturers"
+              sequence="70"
+              groups="client_equipment.group_client_equipment_user"/>
+</odoo>

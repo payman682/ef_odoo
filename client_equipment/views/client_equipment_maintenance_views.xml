@@ -1,0 +1,63 @@
+<odoo>
+  <record id="view_client_equipment_maintenance_list" model="ir.ui.view">
+    <field name="name">client.equipment.maintenance.list</field>
+    <field name="model">client.equipment.maintenance</field>
+    <field name="arch" type="xml">
+      <list>
+        <field name="equipment_id"/>
+        <field name="name"/>
+        <field name="interval_number"/>
+        <field name="interval_type"/>
+        <field name="last_service_date"/>
+        <field name="next_service_date"/>
+        <field name="responsible_id"/>
+        <field name="auto_create_task"/>
+        <field name="active"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_client_equipment_maintenance_form" model="ir.ui.view">
+    <field name="name">client.equipment.maintenance.form</field>
+    <field name="model">client.equipment.maintenance</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="lock_equipment_ctx" invisible="1"/>
+
+            <!-- When opened from a specific Equipment, lock the selector to avoid user confusion. -->
+            <field name="equipment_id"
+                   readonly="1"
+                   options="{'no_create': True, 'no_open': True}"
+                   invisible="not lock_equipment_ctx"/>
+
+            <!-- When opened from the main menu, equipment remains selectable. -->
+            <field name="equipment_id"
+                   options="{'no_create': True}"
+                   invisible="lock_equipment_ctx"/>
+            <field name="name"/>
+            <field name="responsible_id"/>
+            <field name="auto_create_task"/>
+            <field name="active"/>
+          </group>
+          <group string="Frequency">
+            <field name="interval_number"/>
+            <field name="interval_type"/>
+            <field name="last_service_date"/>
+            <field name="next_service_date" readonly="1"/>
+          </group>
+          <group>
+            <field name="notes"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_client_equipment_maintenance" model="ir.actions.act_window">
+    <field name="name">Maintenance Schedules</field>
+    <field name="res_model">client.equipment.maintenance</field>
+    <field name="view_mode">list,form</field>
+  </record>
+</odoo>

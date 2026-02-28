@@ -1,0 +1,34 @@
+<odoo>
+    <record id="view_technician_history_wizard_form" model="ir.ui.view">
+        <field name="name">client.equipment.technician.history.wizard.form</field>
+        <field name="model">client.equipment.technician.history.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Technician History">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="technician_id"/>
+                        <field name="only_done"/>
+                    </group>
+                    <group>
+                        <field name="partner_id"/>
+                        <field name="equipment_id" context="{'search_default_active': 1}"/>
+                        <field name="serial_search"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_show_tasks" type="object" string="Show Tasks" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_technician_history_wizard" model="ir.actions.act_window">
+        <field name="name">Technician History</field>
+        <field name="res_model">client.equipment.technician.history.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

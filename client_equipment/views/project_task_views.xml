@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <record id="view_task_form_inherit_client_equipment" model="ir.ui.view">
+      <field name="name">project.task.form.inherit.client.equipment</field>
+      <field name="model">project.task</field>
+      <field name="inherit_id" ref="project.view_task_form2"/>
+      <field name="arch" type="xml">
+        <!-- Service Type ribbons (Odoo 17+ uses boolean expressions, not attrs) -->
+        <xpath expr="//sheet" position="inside">
+          <widget name="web_ribbon" title="WORKSHOP" bg_color="bg-warning" invisible="service_type != 'workshop'"/>
+          <widget name="web_ribbon" title="ON-SITE" bg_color="bg-info" invisible="service_type != 'on_site'"/>
+        </xpath>
+
+
+        <!-- PM Number (read-only) -->
+        <xpath expr="//field[@name='name']" position="after">
+          <field name="pm_sequence" readonly="1" invisible="not pm_schedule_id"/>
+        </xpath>
+
+
+
+
+        <!-- Client Equipment fields after Customer -->
+        <xpath expr="//field[@name='partner_id']" position="after">
+          <field name="service_type"/>
+          <field name="client_equipment_id"
+                 domain="[('partner_id', '=', partner_id)]"
+                 context="{'default_partner_id': partner_id}"/>
+          <field name="equipment_site" readonly="1"/>
+          <field name="equipment_serial" readonly="1"/>
+          <field name="hour_meter_reading"/>
+          <field name="hour_meter_previous" readonly="1"/>
+          <field name="hour_meter_delta" readonly="1"/>
+        </xpath>
+
+      </field>
+    </record>
+
+  </data>
+</odoo>

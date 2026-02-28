@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Root menu must be loaded BEFORE any other file references it as parent -->
+    <menuitem id="menu_client_equipment_root"
+              name="Client Equipment"
+              sequence="10"
+              groups="client_equipment.group_client_equipment_user"/>
+</odoo>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <record id="view_client_equipment_pm_wizard_form" model="ir.ui.view">
+      <field name="name">client.equipment.pm.wizard.form</field>
+      <field name="model">client.equipment.pm.wizard</field>
+      <field name="arch" type="xml">
+        <form string="New PM">
+          <group>
+            <field name="lock_equipment" invisible="1"/>
+            <field name="equipment_id" required="1" readonly="1" domain="[('id','=', equipment_id)]" options="{'no_open': True, 'no_create': True}" invisible="not lock_equipment"/>
+            <field name="equipment_id" required="1" invisible="lock_equipment"/>
+            <field name="equipment_category_id" readonly="1"/>
+            <field name="schedule_id" required="1"/>
+            <field name="template_id" readonly="1"/>
+          </group>
+          <group>
+            <field name="service_project_id" required="1"/>
+            <field name="technician_id"/>
+            <field name="due_date"/>
+          </group>
+          <footer>
+            <button string="Create PM Task" name="action_create_task_and_open" type="object" class="btn-primary"/>
+            <button string="Cancel" special="cancel" class="btn-secondary"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+
+
+    <record id="action_client_equipment_new_pm_wizard" model="ir.actions.act_window">
+      <field name="name">New PM</field>
+      <field name="res_model">client.equipment.pm.wizard</field>
+      <field name="view_mode">form</field>
+      <field name="target">new</field>
+      <field name="context">{}</field>
+    </record>
+
+  </data>
+</odoo>

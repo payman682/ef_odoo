@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <record id="view_pm_checklist_template_list" model="ir.ui.view">
+      <field name="name">client.equipment.pm.checklist.template.list</field>
+      <field name="model">client.equipment.pm.checklist.template</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="name"/>
+          <field name="category_id"/>
+          <field name="active"/>
+        </list>
+      </field>
+    </record>
+
+    <record id="view_pm_checklist_template_form" model="ir.ui.view">
+      <field name="name">client.equipment.pm.checklist.template.form</field>
+      <field name="model">client.equipment.pm.checklist.template</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="category_id" required="1"/>
+              <field name="active"/>
+            </group>
+
+            <notebook>
+              <page string="Checklist Items">
+                <field name="line_ids">
+                  <list editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    <field name="section_id"
+                           domain="['|', ('category_id', '=', False), ('category_id', '=', template_category_id)]"/>
+                    <field name="name"/>
+                  </list>
+                </field>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="action_pm_checklist_templates" model="ir.actions.act_window">
+      <field name="name">PM Checklist Templates</field>
+      <field name="res_model">client.equipment.pm.checklist.template</field>
+      <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Add template selector on Maintenance Schedule -->
+    <record id="view_client_equipment_maintenance_form_inherit_pm_template" model="ir.ui.view">
+      <field name="name">client.equipment.maintenance.form.inherit.pm.template</field>
+      <field name="model">client.equipment.maintenance</field>
+      <field name="inherit_id" ref="client_equipment.view_client_equipment_maintenance_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//group[.//field[@name='notes']]" position="after">
+          <group string="PM Checklist">
+            <field name="checklist_template_id" domain="[('category_id','=', equipment_category_id)]"/>
+          </group>
+        </xpath>
+      </field>
+    </record>
+
+    <!-- Add PM Checklist tab on Task -->
+    <record id="view_task_form_inherit_pm_checklist" model="ir.ui.view">
+      <field name="name">project.task.form.inherit.pm.checklist</field>
+      <field name="model">project.task</field>
+      <field name="inherit_id" ref="project.view_task_form2"/>
+      <field name="arch" type="xml">
+        <xpath expr="//notebook" position="inside">
+          <page string="PM Checklist" invisible="not pm_schedule_id">
+            <field name="pm_checklist_line_ids">
+              <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="section_id"
+                       domain="['|', ('category_id', '=', False), ('category_id', '=', task_equipment_category_id)]"/>
+                <field name="name"/>
+                <field name="status"/>
+                <field name="remarks"/>
+              </list>
+            </field>
+          </page>
+          <page string="Signatures">
+            <group col="2">
+              <group string="Technician">
+                <field name="tech_signed_name"/>
+                <field name="tech_signed_on"/>
+                <field name="tech_signature" widget="signature"/>
+              </group>
+              <group string="Customer">
+                <field name="customer_signed_name"/>
+                <field name="customer_signed_on"/>
+                <field name="customer_signature" widget="signature"/>
+              </group>
+            </group>
+          </page>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</odoo>

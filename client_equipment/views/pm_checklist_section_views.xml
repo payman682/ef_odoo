@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <record id="view_pm_checklist_section_list" model="ir.ui.view">
+      <field name="name">client.equipment.pm.checklist.section.list</field>
+      <field name="model">client.equipment.pm.checklist.section</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="sequence" widget="handle"/>
+          <field name="name"/>
+          <field name="category_id"/>
+          <field name="active"/>
+        </list>
+      </field>
+    </record>
+
+    <record id="view_pm_checklist_section_form" model="ir.ui.view">
+      <field name="name">client.equipment.pm.checklist.section.form</field>
+      <field name="model">client.equipment.pm.checklist.section</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="category_id"/>
+              <field name="sequence"/>
+              <field name="active"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="action_pm_checklist_sections" model="ir.actions.act_window">
+      <field name="name">PM Checklist Sections</field>
+      <field name="res_model">client.equipment.pm.checklist.section</field>
+      <field name="view_mode">list,form</field>
+    </record>
+
+  </data>
+</odoo>

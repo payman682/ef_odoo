@@ -1,0 +1,11 @@
+<odoo>
+    <record id="product_categ_labor_override" model="product.category">
+        <field name="name">Labor (Override)</field>
+        <field name="parent_id" eval="False"/>
+    </record>
+
+    <record id="product_categ_parts_override" model="product.category">
+        <field name="name">Parts (Override)</field>
+        <field name="parent_id" eval="False"/>
+    </record>
+</odoo>
